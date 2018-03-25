@@ -81,10 +81,12 @@ function do_global_read_request()
   ts.ctx["mst"] = txn
   ts.debug("done with setting context")
 
+  ts.hook(TS_LUA_HOOK_READ_RESPONSE_HDR, read_response)
+
   return 0
 end
 
-function do_global_read_response()
+function read_response()
   local txn = ts.ctx["mst"]
   
   if(txn == nil) then
@@ -96,7 +98,7 @@ function do_global_read_response()
   for k, v in pairs(hdrs) do
     msc.msc_add_response_header(txn, k, v)
   end
-  msc.msc_process_response_headers(ts.server_response.get_status(), "HTTP/"..ts.server_response.get_version())
+  msc.msc_process_response_headers(txn, ts.server_response.get_status(), "HTTP/"..ts.server_response.get_version())
 
   ts.debug("done with processing response")  
 
