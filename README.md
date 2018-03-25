@@ -52,7 +52,7 @@ TODOs/Limitations
    gzipped)
  - Support to reload the rule without restarting ATS
  - Need more thoughts on logging
- - When does this work with the lua engine inside ModSecurity V3
+ - How does this work with the lua engine inside ModSecurity V3?
  - Unit Test using busted
  - More functional testing needed. Ideally should test extensively with OWASP CRS ruleset
  - Performance testing - impact to latency and capacity 
