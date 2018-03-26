@@ -39,9 +39,20 @@ local msc = ffi.load("/usr/local/modsecurity/lib/libmodsecurity.so")
 local mst = msc.msc_init()
 msc.msc_set_connector_info(mst, "ModSecurity-test")
 
-local rules = msc.msc_create_rules_set()
-local error = ffi.new("const char*[?]", 128)
-local result = msc.msc_rules_add_file(rules, "/usr/local/var/modsecurity/example.conf", error)
+local rules = nil
+
+function __init__(argtb)
+  if (#argtb) < 1 then
+    ts.error("No ModSecurity Conf is given")
+    return -1 
+  end  
+
+  ts.debug("ModSecurity Conf file is " .. argtb[1])
+
+  rules = msc.msc_create_rules_set()
+  local error = ffi.new("const char*[?]", 128)
+  msc.msc_rules_add_file(rules, argtb[1], error)
+end
 
 function do_global_read_request()
   local txn = msc.msc_new_transaction(mst, rules ,nil)
@@ -90,7 +101,7 @@ function read_response()
   local txn = ts.ctx["mst"]
   
   if(txn == nil) then
-    ts.debug("no transaction object")
+    ts.error("no transaction object")
     return 0
   end
 
@@ -112,6 +123,7 @@ function read_response()
     ts.http.set_resp(iv.status, "ModSecurity message")
     ts.ctx["mst"] = nil
     msc.msc_transaction_cleanup(txn)
+    ts.debug("done with cleaning up context and return error response")
     return 1
   end
 

@@ -46,7 +46,6 @@ tslua.so /usr/local/var/lua/ats-luajit-modsecurity.lua
 TODOs/Limitations
 ====
  - need to use "log" and "url" in ModSecurityIntervention and free the memory after use
- - pass in the ModSecurity conf instead of hardcoding it in the code
  - Extract out a luajit binding for ModSecuritythat can be reused in other place
  - Support for REQUEST_BODY / RESPONSE BODY examination (We need to uncompress the contents first if they are
    gzipped)
