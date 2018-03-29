@@ -37,7 +37,7 @@ How to Use
  - Add a line in /usr/local/etc/trafficserver/plugin.config and restart ats
 
 ```
-tslua.so /usr/local/var/lua/ats-luajit-modsecurity.lua
+tslua.so /usr/local/var/lua/ats-luajit-modsecurity.lua /usr/local/var/modsecurity/example.conf
 ```
 
  - The example rule file will deny any request handled by the ATS with query parameter of (testparam=test) with a 403
