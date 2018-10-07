@@ -15,8 +15,8 @@ git clone --depth 1 -b v3/master --single-branch https://github.com/SpiderLabs/M
 cd ModSecurity
 git submodule init
 git submodule update
-git ./build.sh
-git ./configure
+./build.sh
+./configure
 make 
 make install
 ``` 
