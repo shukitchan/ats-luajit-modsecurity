@@ -1,8 +1,7 @@
-Integrating ATS with ModSecurity V3 using LuaJIT with FFI
+Integrating ATS with ModSecurity V3 using LuaJIT and FFI
 ====
 
-Using FFI, pure Lua. so you don't have to build when install. 
-(still requires libmodsecurity.so)
+Now you can have a WAF for ATS.
 
 Requirement 
 ====
@@ -32,7 +31,7 @@ Apache Traffic Server with ts_lua plugin
 
 How to Use
 ====
- - Copy ats-luajit-modsecurity.lua to specific location (e.g. /usr/local/var/lua)
+ - Copy all lua files to /usr/local/var/lua
  - Put the example modsecurity rule file (example.conf) to /usr/local/var/modsecurity , readable by the ATS process
  - Add a line in /usr/local/etc/trafficserver/plugin.config and restart ats
 
@@ -40,19 +39,22 @@ How to Use
 tslua.so /usr/local/var/lua/ats-luajit-modsecurity.lua /usr/local/var/modsecurity/example.conf
 ```
 
- - The example rule file will deny any request handled by the ATS with query parameter of (testparam=test) with a 403
-   status response 
+ - Changes can be made to example.conf and can be reloaded without restarting ATS. Just follow instructions here - https://docs.trafficserver.apache.org/en/latest/appendices/command-line/traffic_ctl.en.html#cmdoption-traffic-ctl-config-arg-reload 
+
+Example rules (example.conf)
+====
+ - deny any request with query parameter of "testparam=test2" with a 403 status response 
+ - return any request with query parameter of "testparam=test1" with 301 redirect response to https://www.yahoo.com/
+ - override any response with header "test" equal to "1" with a 403 status response
+ - override any response with header "test" equal to "2" with a 301 redirect response to https://www.yahoo.com/
+ - write debug log out to /tmp/test.txt
 
 TODOs/Limitations
 ====
- - need to use "log" and "url" in ModSecurityIntervention and free the memory after use
- - Extract out a luajit binding for ModSecuritythat can be reused in other place
- - Support for REQUEST_BODY / RESPONSE BODY examination (We need to uncompress the contents first if they are
-   gzipped)
- - Support to reload the rule without restarting ATS
- - Need more thoughts on logging
+ - Do not support REQUEST_BODY / RESPONSE BODY examination (We need to uncompress the contents first if they are
+   gzipped. And that will be expensive operation for proxy)
  - How does this work with the lua engine inside ModSecurity V3?
- - Unit Test using busted
+ - Unit Test using busted framework
  - More functional testing needed. Ideally should test extensively with OWASP CRS ruleset
  - Performance testing - impact to latency and capacity 
 
@@ -61,7 +63,7 @@ License
 
 This software is distributed under MIT-like license:
 
-#### Copyright (c) 2017-2018 Shu Kit Chan
+#### Copyright (c) 2018-2019 Shu Kit Chan
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
