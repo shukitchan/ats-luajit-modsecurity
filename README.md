@@ -29,6 +29,13 @@ Apache Traffic Server with ts_lua plugin
 ./configure --enable-experimental-plugins=yes --enable-debug=yes
 ```
 
+httpbin
+----
+ - We need a service to generate error response code 
+ - Accept request in this format "http[s]://<your domain>/<response code>" and generate a response with that status
+   code.
+ - Any service will do. httpbin is just one of many that does the job.
+
 How to Use
 ====
  - Copy all lua files to /usr/local/var/lua
@@ -40,6 +47,7 @@ tslua.so /usr/local/var/lua/ats-luajit-modsecurity.lua /usr/local/var/modsecurit
 ```
 
  - Changes can be made to example.conf and can be reloaded without restarting ATS. Just follow instructions here - https://docs.trafficserver.apache.org/en/latest/appendices/command-line/traffic_ctl.en.html#cmdoption-traffic-ctl-config-arg-reload 
+ - Open "ats-luajit-modsecurity.lua" and update the "STATUS_SERVICE" variable to your httpbin service accordingly.
 
 Example rules (example.conf)
 ====
