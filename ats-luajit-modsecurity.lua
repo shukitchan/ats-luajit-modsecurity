@@ -155,21 +155,30 @@ function read_response()
   end
 
   -- if found an intervention url, trigger handler when sending response to client
+  ts.ctx['url'] = ''
   if(iv.url ~= nil) then
     ts.ctx['url'] = ffi.string(iv.url)
-    ts.hook(TS_LUA_HOOK_SEND_RESPONSE_HDR, send_response)
     C.free(iv.url)
   end  
 
   -- intervention needed when status is not 200
+  ts.ctx['status'] = nil
   if (iv.status ~= 200) then
-    -- override the response code status by triggering a redirect follow to service that render the non-200 status
-    ts.http.redirect_url_set(STATUS_SERVICE .. iv.status)
+    ts.ctx['status'] = iv.status
+  end 
+
+  -- response needs to be modified?
+  if(ts.ctx['url'] ~= '' or ts.ctx['status'] ~= nil) then
+    ts.hook(TS_LUA_HOOK_SEND_RESPONSE_HDR, send_response)
+  end 
+  
+  -- we need to return -1 for lua to reset response body with an error body  
+  if(ts.ctx['status'] ~= nil) then
     ts.ctx["mst"] = nil
     msc.msc_process_logging(txn)
     msc.msc_transaction_cleanup(txn)
     ts.debug("done with cleaning up context and return error response")
-    return 0
+    return -1
   end
 
   -- cleaning up
@@ -185,6 +194,14 @@ end
 function send_response()
   -- retrieve intervention url and add it as "Location" header on response to client
   local location = ts.ctx['url']
-  ts.debug('location: ' .. location)
-  ts.client_response.header['Location'] = location
+  if (location ~= '') then 
+    ts.debug('location: ' .. location)
+    ts.client_response.header['Location'] = location
+  end
+
+  -- retrieve status and reset the response with it
+  local status = ts.ctx['status']
+  if (status ~= nil) then
+    ts.client_response.set_error_resp(status, 'Contents Reset by ModSecurity\n')
+  end 
 end
