@@ -5,9 +5,6 @@ local msc_config = require("msc_config")
 local ffi = require("ffi")
 local C = require("C")
 
--- This service provides a way to return non-200 status code from this lua module
-local STATUS_SERVICE = 'https://httpbin.org/status/'
-
 local mst = msc.msc_init()
 msc.msc_set_connector_info(mst, "ModSecurity-ats")
 
