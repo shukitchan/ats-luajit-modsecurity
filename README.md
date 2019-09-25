@@ -52,6 +52,7 @@ Contents/Rules inside example.conf
 
 TODOs/Limitations
 ====
+ - Cannot accept multiple configuration files. e.g. OWASP CRS ruleset consists of multiple configuration files. 
  - Do not support REQUEST_BODY / RESPONSE BODY examination (We need to uncompress the contents first if they are
    gzipped. And that will be expensive operation for proxy)
  - How does this work with the lua engine inside ModSecurity V3?
