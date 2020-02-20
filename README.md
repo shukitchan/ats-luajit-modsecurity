@@ -36,11 +36,10 @@ How to Use
  - Add a line in /usr/local/etc/trafficserver/plugin.config and restart ats
 
 ```
-tslua.so /usr/local/var/lua/ats-luajit-modsecurity.lua /usr/local/var/modsecurity/example.conf
+tslua.so --enable-reload /usr/local/var/lua/ats-luajit-modsecurity.lua /usr/local/var/modsecurity/*.conf
 ```
 
  - Changes can be made to example.conf and can be reloaded without restarting ATS. Just follow instructions here - https://docs.trafficserver.apache.org/en/latest/appendices/command-line/traffic_ctl.en.html#cmdoption-traffic-ctl-config-arg-reload 
- - Open "msc_config.lua" and update the rules file location if you provide a different file than example.conf
 
 Contents/Rules inside example.conf
 ====
@@ -52,7 +51,6 @@ Contents/Rules inside example.conf
 
 TODOs/Limitations
 ====
- - Cannot accept multiple configuration files. e.g. OWASP CRS ruleset consists of multiple configuration files. 
  - Do not support REQUEST_BODY / RESPONSE BODY examination (We need to uncompress the contents first if they are
    gzipped. And that will be expensive operation for proxy)
  - How does this work with the lua engine inside ModSecurity V3?
