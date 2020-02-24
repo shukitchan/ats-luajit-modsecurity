@@ -86,7 +86,7 @@ function do_global_read_request()
     msc.msc_add_request_header(txn, k, v)
   end
   msc.msc_process_request_headers(txn)
-
+  msc.msc_process_request_body(txn)
   ts.debug("done with processing request")
 
   -- detect if intervention is needed
@@ -145,7 +145,7 @@ function read_response()
     msc.msc_add_response_header(txn, k, v)
   end
   msc.msc_process_response_headers(txn, ts.server_response.get_status(), "HTTP/"..ts.server_response.get_version())
-
+  msc.msc_process_response_body(txn)
   ts.debug("done with processing response")  
 
   -- determine if intervention is needed

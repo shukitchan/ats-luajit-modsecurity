@@ -20,8 +20,10 @@ int msc_process_connection(Transaction *transaction, const char *client, int cPo
 int msc_process_uri(Transaction *transaction, const char *uri, const char *protocol, const char *http_version);
 int msc_add_request_header(Transaction *transaction, const unsigned char *key, const unsigned char *value);
 int msc_process_request_headers(Transaction *transaction);
+int msc_process_request_body(Transaction *transaction);
 int msc_add_response_header(Transaction *transaction, const unsigned char *key, const unsigned char *value);
 int msc_process_response_headers(Transaction *transaction, int code, const char* protocol);
+int msc_process_response_body(Transaction *transaction);
 int msc_process_logging(Transaction *transaction);
 void msc_transaction_cleanup(Transaction *transaction);
 
