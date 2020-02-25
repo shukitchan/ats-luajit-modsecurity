@@ -49,12 +49,43 @@ Contents/Rules inside example.conf
  - override any response with header "test" equal to "2" with a 301 redirect response to https://www.yahoo.com/
  - write debug log out to /tmp/test.txt
 
+Working with CRS
+====
+ - Go to https://github.com/SpiderLabs/owasp-modsecurity-crs and get release v3.2.0
+ - Uncompress the contents and copy crs-setup.conf.example to /usr/local/var/modsecurity and rename it to crs-setup.conf
+ - Add the following to the first line of crs-setup.conf
+
+```
+SecRuleEngine On
+```
+
+ - Copy all files in "rules" directory to /usr/local/var/modsecurity/rules
+ - Change /usr/local/etc/trafficserver/plugin.config to the following and restart ats
+
+```
+tslua.so --enable-reload /usr/local/var/lua/ats-luajit-modsecurity.lua /usr/local/var/modsecurity/crs-setup.conf
+/usr/local/var/modsecurity/rules/*.conf
+``` 
+ - Rule ID 910100 requires GeoIP and you may have to comment it out if you do not built the modsecurity library with it.
+ - To debug, you can add the following to the beginning of crs-setup.conf
+
+```
+SecAuditEngine On
+SecAuditLog /tmp/audit.log
+
+SecDebugLog /tmp/debug.log
+SecDebugLogLevel 9
+
+```
+
 TODOs/Limitations
 ====
- - Do not support REQUEST_BODY / RESPONSE BODY examination (We need to uncompress the contents first if they are
+ - No support for REQUEST_BODY examination (We need to buffer the request body for examination first before we send to
+   origin.)
+ - No support for RESPONSE BODY examination (We need to uncompress the contents first if they are
    gzipped. And that will be expensive operation for proxy)
  - How does this work with the lua engine inside ModSecurity V3?
  - Unit Test using busted framework
- - More functional testing needed. Ideally should test extensively with OWASP CRS ruleset
+ - More functional testing needed.
  - Performance testing - impact to latency and capacity 
 
