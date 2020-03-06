@@ -28,7 +28,7 @@ function __init__(argtb)
         local result = msc.msc_rules_add_file(msc_config.rules, file, error)
         if(result < 0) then -- stop further processing for any failure
           ts.error("Problems loading the rules: ".. ffi.string(error[0]))
-          msc.msc_rules_clean(msc_config.rules)
+          msc.msc_rules_cleanup(msc_config.rules)
           msc_config.rules = nil
           return -1
         end 
