@@ -2,7 +2,7 @@
 
 local msc_config = {}
 
-msc_config.rulesfiles = {}
+msc_config.rulesfile = "/usr/local/var/modsecurity/example.conf"
 msc_config.rules = nil
 
 return msc_config

@@ -15,48 +15,38 @@ function __init__(argtb)
     return -1 
   end  
 
-  msc_config.rules = msc.msc_create_rules_set()
-  for k,v in pairs(argtb) do -- loop through all arguments
+  msc_config.rulesfile = argtb[1]	
+  ts.debug("ModSecurity Conf file is " .. msc_config.rulesfile)
 
-    if(k ~= 0) then -- skip first element 
-      ts.debug("Plugin argument: "..v)
-      local p = io.popen('find '..v..' -type f') -- use "find"  
-      for file in p:lines() do -- loop through "find" results
-        ts.debug("Loading Conf file: "..file)
-        table.insert(msc_config.rulesfiles, file)
-        local error = ffi.new("const char *[1]")
-        local result = msc.msc_rules_add_file(msc_config.rules, file, error)
-        if(result < 0) then -- stop further processing for any failure
-          ts.error("Problems loading the rules: ".. ffi.string(error[0]))
-          msc.msc_rules_cleanup(msc_config.rules)
-          msc_config.rules = nil
-          return -1
-        end 
-      end
-    end
-  end
+  msc_config.rules = msc.msc_create_rules_set()
+  local error = ffi.new("const char *[1]")
+  local result = msc.msc_rules_add_file(msc_config.rules, msc_config.rulesfile, error)
+  if(result < 0) then 
+    ts.error("Problems loading the rules: ".. ffi.string(error[0]))  
+    msc.msc_rules_cleanup(msc_config.rules)
+    msc_config.rules = nil
+    return -1
+  end  
 
 end
 
 -- Reload modsecurity configuration. Trigger by "traffic_ctl config reload"
 function __reload__()
-  newrules = msc.msc_create_rules_set()
-  for k,v in pairs(msc_config.rulesfiles) do
-    ts.debug("Reloading Conf file: "..v)
-  
-    local error = ffi.new("const char *[1]")
-    local result = msc.msc_rules_add_file(newrules, v, error)
-    if(result < 0) then
-      ts.error("Problems loading the rules during reload: ".. ffi.string(error[0]))
+  ts.debug("Reloading ModSecurity Conf: " .. msc_config.rulesfile)
 
-      msc.msc_rules_cleanup(newrules)
-      newrules = nil
-      return -1
-    end
+  newrules = msc.msc_create_rules_set()
+  local error = ffi.new("const char *[1]")
+  local result = msc.msc_rules_add_file(newrules, msc_config.rulesfile, error)
+  if(result < 0) then
+    ts.error("Problems loading the rules during reload: ".. ffi.string(error[0]))
+
+    msc.msc_rules_cleanup(newrules)
+    newrules = nil
+  else 
+    -- TODO: we are not doing clean up on the old rules and thus leaking resources here
+    msc_config.rules = newrules  
   end
 
-  -- TODO: we are not doing clean up on the old rules and thus leaking resources here
-  msc_config.rules = newrules
 end
 
 -- Entry point function run for each incoming request

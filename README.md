@@ -1,13 +1,14 @@
 Integrating ATS with ModSecurity V3 using LuaJIT and FFI
 ====
 
-Now you can have a WAF for ATS.
+Opensource WAF for ATS.
 
 Requirement 
 ====
 
 libmodsecurity.so
 ----  
+ - Tested on master branch 
 
 ```
 git clone --depth 1 -b v3/master --single-branch https://github.com/SpiderLabs/ModSecurity
@@ -23,10 +24,9 @@ make install
 Apache Traffic Server with ts_lua plugin
 ----
  - Tested on master branch
- - Configure with option to enable experimental plugins
 
 ```
-./configure --enable-experimental-plugins=yes --enable-debug=yes
+./configure --enable-debug=yes
 ```
 
 How to Use
@@ -36,7 +36,7 @@ How to Use
  - Add a line in /usr/local/etc/trafficserver/plugin.config and restart ats
 
 ```
-tslua.so --enable-reload /usr/local/var/lua/ats-luajit-modsecurity.lua /usr/local/var/modsecurity/*.conf
+tslua.so --enable-reload /usr/local/var/lua/ats-luajit-modsecurity.lua /usr/local/var/modsecurity/example.conf
 ```
 
  - Changes can be made to example.conf and can be reloaded without restarting ATS. Just follow instructions here - https://docs.trafficserver.apache.org/en/latest/appendices/command-line/traffic_ctl.en.html#cmdoption-traffic-ctl-config-arg-reload 
@@ -53,21 +53,15 @@ Working with CRS
 ====
  - Go to https://github.com/SpiderLabs/owasp-modsecurity-crs and get release v3.2.0
  - Uncompress the contents and copy crs-setup.conf.example to /usr/local/var/modsecurity and rename it to crs-setup.conf
- - Add the following to the first line of crs-setup.conf
-
-```
-SecRuleEngine On
-```
-
  - Copy all files in "rules" directory to /usr/local/var/modsecurity/rules
+ - Copy owasp.conf in this repository to /usr/local/var/modsecurity
  - Change /usr/local/etc/trafficserver/plugin.config to the following and restart ats
 
 ```
-tslua.so --enable-reload /usr/local/var/lua/ats-luajit-modsecurity.lua /usr/local/var/modsecurity/crs-setup.conf
-/usr/local/var/modsecurity/rules/*.conf
+tslua.so --enable-reload /usr/local/var/lua/ats-luajit-modsecurity.lua /usr/local/var/modsecurity/owasp.conf
 ``` 
- - Rule ID 910100 requires GeoIP and you may have to comment it out if you do not built the modsecurity library with it.
- - To debug, you can add the following to the beginning of crs-setup.conf
+ - Rule ID 910100 in REQUEST-910-IP-REPUTATION.conf in "rules" directory requires GeoIP and have to be commented it out if you do not built the modsecurity library with it.
+ - To debug, you can uncomment the following inside owasp.conf
 
 ```
 SecAuditEngine On
