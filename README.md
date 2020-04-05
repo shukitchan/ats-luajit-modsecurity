@@ -61,12 +61,9 @@ Working with CRS
 tslua.so --enable-reload /usr/local/var/lua/ats-luajit-modsecurity.lua /usr/local/var/modsecurity/owasp.conf
 ``` 
  - Rule ID 910100 in REQUEST-910-IP-REPUTATION.conf in "rules" directory requires GeoIP and have to be commented it out if you do not built the modsecurity library with it.
- - To debug, you can uncomment the following inside owasp.conf
+ - To turn on debugging, you can uncomment the following inside owasp.conf
 
 ```
-SecAuditEngine On
-SecAuditLog /tmp/audit.log
-
 SecDebugLog /tmp/debug.log
 SecDebugLogLevel 9
 
