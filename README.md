@@ -42,6 +42,7 @@ tslua.so --enable-reload /usr/local/var/lua/ats-luajit-modsecurity.lua /usr/loca
 
 Extra Notes with CRS
 ====
+ - Please check out this [link](https://github.com/SpiderLabs/ModSecurity/issues/1734) for performance related information 
  - To turn on debugging, you can uncomment the following inside owasp.conf
 
 ```
