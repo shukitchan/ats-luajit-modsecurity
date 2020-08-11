@@ -1,7 +1,7 @@
 Integrating ATS with ModSecurity V3 using LuaJIT and FFI
 ====
 
-Opensource WAF for ATS.
+Opensource WAF for [Apache Traffic Server](http://trafficserver.apache.org/).
 
 Requirement 
 ====
@@ -39,6 +39,12 @@ Working with CRS
 ```
 tslua.so --enable-reload /usr/local/var/lua/ats-luajit-modsecurity.lua /usr/local/var/modsecurity/owasp.conf
 ``` 
+
+ - The following example curl command against your server should get a status 403 Forbidden response
+ 
+ ```
+ curl -v -H "User-Agent: Nikto" 'http://<your server>/'
+ ```
 
 Extra Notes with CRS
 ====
