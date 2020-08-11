@@ -5,29 +5,8 @@ Opensource WAF for ATS.
 
 Requirement 
 ====
-
-libmodsecurity.so
-----  
- - Tested on master branch 
-
-```
-git clone --depth 1 -b v3/master --single-branch https://github.com/SpiderLabs/ModSecurity
-cd ModSecurity
-git submodule init
-git submodule update
-./build.sh
-./configure
-make 
-make install
-``` 
-
-Apache Traffic Server with ts_lua plugin
-----
- - Tested on master branch
-
-```
-./configure --enable-debug=yes
-```
+ - ModSecurity 3.0.4 
+ - ATS 8.0.8 
 
 How to Use
 ====
@@ -60,14 +39,18 @@ Working with CRS
 ```
 tslua.so --enable-reload /usr/local/var/lua/ats-luajit-modsecurity.lua /usr/local/var/modsecurity/owasp.conf
 ``` 
- - Rule ID 910100 in REQUEST-910-IP-REPUTATION.conf in "rules" directory requires GeoIP and have to be commented it out if you do not built the modsecurity library with it.
+
+Extra Notes with CRS
+====
  - To turn on debugging, you can uncomment the following inside owasp.conf
 
 ```
 SecDebugLog /tmp/debug.log
 SecDebugLogLevel 9
-
 ```
+
+- Rule ID 910100 in REQUEST-910-IP-REPUTATION.conf in "rules" directory requires GeoIP and have to be commented it out if you do not built the modsecurity library with it.
+
 
 TODOs/Limitations
 ====
