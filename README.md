@@ -5,7 +5,7 @@ Opensource WAF for ATS.
 
 Requirement 
 ====
- - ModSecurity 3.0.4 
+ - ModSecurity v3.0.4 
  - ATS 8.0.8 
 
 How to Use
@@ -26,7 +26,7 @@ Contents/Rules inside example.conf
  - return any request with query parameter of "testparam=test1" with 301 redirect response to https://www.yahoo.com/
  - override any response with header "test" equal to "1" with a 403 status response
  - override any response with header "test" equal to "2" with a 301 redirect response to https://www.yahoo.com/
- - write debug log out to /tmp/test.txt
+ - write debug log out to /tmp/debug.log
 
 Working with CRS
 ====
