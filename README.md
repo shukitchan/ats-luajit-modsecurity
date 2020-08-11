@@ -56,7 +56,7 @@ SecDebugLog /tmp/debug.log
 SecDebugLogLevel 9
 ```
 
-- Rule ID 910100 in REQUEST-910-IP-REPUTATION.conf in "rules" directory requires GeoIP and have to be commented it out if you do not built the modsecurity library with it.
+- Rule ID 910100 in REQUEST-910-IP-REPUTATION.conf in "rules" directory requires GeoIP and have to be commented out if you do not built the modsecurity library with it.
 
 
 TODOs/Limitations
