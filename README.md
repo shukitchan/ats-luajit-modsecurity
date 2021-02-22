@@ -63,7 +63,7 @@ SecDebugLogLevel 9
 TODOs/Limitations
 ====
  - No support for `REQUEST_BODY` examination (We need to buffer the request body for examination first before we send to origin.)
- - No support for `RESPONSE BODY` examination (We need to uncompress the contents first if they are gzipped. And that will be expensive operation for proxy)
+ - No support for `RESPONSE_BODY` examination (We need to uncompress the contents first if they are gzipped. And that will be expensive operation for proxy). See https://github.com/SpiderLabs/ModSecurity/issues/2494 for reference
  - How does this work with the lua engine inside ModSecurity V3?
  - Unit Test using busted framework
  - More functional testing needed
