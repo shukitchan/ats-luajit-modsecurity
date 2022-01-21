@@ -1,4 +1,4 @@
-Integrating ATS with ModSecurity V3 using LuaJIT and FFI
+Integrating ATS with ModSecurity V3 using LuaJIT and FFI (Moved to https://github.com/apache/trafficserver/tree/master/example/plugins/lua-api)
 ====
 
 Opensource WAF for [Apache Traffic Server](http://trafficserver.apache.org/).
